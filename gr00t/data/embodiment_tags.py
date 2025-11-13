@@ -37,6 +37,11 @@ class EmbodimentTag(Enum):
     Any new embodiment for finetuning.
     """
 
+    UCL_TEST_BOT = "UCL_Test_Bot"
+    """
+    The UCL Test Bot dataset.
+    """
+
 
 # Embodiment tag string: to projector index in the Action Expert Module
 EMBODIMENT_TAG_MAPPING = {
@@ -44,4 +49,6 @@ EMBODIMENT_TAG_MAPPING = {
     EmbodimentTag.OXE_DROID.value: 17,
     EmbodimentTag.AGIBOT_GENIE1.value: 26,
     EmbodimentTag.GR1.value: 24,
+    # Must be < max_num_embodiments (default 32). Use 31 like NEW_EMBODIMENT.
+    EmbodimentTag.UCL_TEST_BOT.value: 30,
 }
