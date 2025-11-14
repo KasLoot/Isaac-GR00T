@@ -83,7 +83,7 @@ step_data = UCL_Test_Bot_step_data
 print(step_data)
 
 
-print("\n\n ====================================")
+print("\n\n GR00T Input:")
 for key, value in step_data.items():
     if isinstance(value, np.ndarray):
         print(f"key: {key}, shape: {value.shape}")
