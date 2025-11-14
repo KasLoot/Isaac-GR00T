@@ -10,8 +10,12 @@ from gr00t.experiment.data_config import DATA_CONFIG_MAP
 
 torch.cuda.empty_cache()
 
+USE_DOCKER_PATHS = True  # set to True if running in docker, and
 # change the following paths
-MODEL_PATH = "/media/yuxin/DiskBox/models/GR00T-N1.5-3B"
+if USE_DOCKER_PATHS:
+    MODEL_PATH = "/workspace/checkpoints/GR00T-N1.5-3B"
+else:
+    MODEL_PATH = "/media/yuxin/DiskBox/models/GR00T-N1.5-3B"
 
 # REPO_PATH is the path of the pip install gr00t repo and one level up
 REPO_PATH = os.path.dirname(os.path.dirname(gr00t.__file__))
