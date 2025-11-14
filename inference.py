@@ -24,6 +24,7 @@ EMBODIMENT_TAG = "UCL_Test_Bot"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+print(f"Using device: {device}")
 
 
 data_config = DATA_CONFIG_MAP["UCL_Test_Bot"]
