@@ -1,10 +1,15 @@
 # Inference Using Custom Robot and Datasets
+
 ## Quick Start
+
 1. Run inference code with dummy data.
+
 ```bash
 python inference.py
 ```
+
 2. You should get terminal outputs:
+
 ```
  GR00T Input:
 key: video.gripper_view, shape: (1, 256, 256, 3)
@@ -22,29 +27,55 @@ action.arm_joint_positions (16, 7)
 action.eef_position (16, 3)
 action.eef_rotation (16, 3)
 ```
+
 ## Inputs and Outputs
+
 ### Inputs
+
 The model takes in the current observation, states, past predicted actions, and task description as inputs.
-* video.gripper_view, shape: (1, 256, 256, 3): (batch_size, height, width, channel)
-* state.arm_joint_positions, shape: (1, 7): (batch_size, num_joints)
-* state.eef_position, shape: (1, 3): (batch_size, cartisian_positions_xyz)
-* state.eef_rotation, shape: (1, 3): (batch_size, cartisian_orientations_rpy)
-* action.arm_joint_positions, shape: (16, 7): (num_time_steps_action_predicted, num_joints)
-* action.eef_position, shape: (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
-* action.eef_rotation, shape: (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
-* annotation.human.action.task_description: A list of length batch_size containing the task description strings.
+
+- video.gripper_view, shape: (1, 256, 256, 3): (batch_size, height, width, channel)
+- state.arm_joint_positions, shape: (1, 7): (batch_size, num_joints)
+- state.eef_position, shape: (1, 3): (batch_size, cartisian_positions_xyz)
+- state.eef_rotation, shape: (1, 3): (batch_size, cartisian_orientations_rpy)
+- action.arm_joint_positions, shape: (16, 7): (num_time_steps_action_predicted, num_joints)
+- action.eef_position, shape: (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
+- action.eef_rotation, shape: (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
+- annotation.human.action.task_description: A list of length batch_size containing the task description strings.
 
 ### Outputs
+
 The model outputs the predicted actions for the next 16 time steps.
-* action.arm_joint_positions (16, 7): (num_time_steps_action_predicted, num_joints)
-* action.eef_position (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
-* action.eef_rotation (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
+
+- action.arm_joint_positions (16, 7): (num_time_steps_action_predicted, num_joints)
+- action.eef_position (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
+- action.eef_rotation (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
+
+## Using Docker Container
+
+1. Build the image using the docker file
+
+```
+docker build -f thor.Dockerfile -t isaac-groot-thor .
+```
+
+2. Create a container from the docker image
+
+```
+docker run -it --gpus all \
+  -v /home/yuxin/Isaac-GR00T:/workspace \
+  --name groot-container \
+  isaac-groot-thor
+```
 
 ## How to Add Your Own Robot Configuration?
+
 ### Add Data Config
+
 1. Add your data config class in `./gr00t/experiment/data_config.py`
 2. Add your DATA_CONFIG_MAP
 3. In the inference code, set `data_config = DATA_CONFIG_MAP["UCL_Test_Bot"]`
+
 ```python
 class UCL_Test_BotDataConfig(BaseDataConfig): # This is the new data config class
     video_keys = [
@@ -122,10 +153,13 @@ DATA_CONFIG_MAP = {
     "UCL_Test_Bot": UCL_Test_BotDataConfig(), # This is the new Data config map
 }
 ```
+
 ### Add Embodiment Tag
+
 1. Navigate to `gr00t/data/embodiment_tags.py`
 2. Add your Embodiment Tag (Use this tag in your inference code: `EMBODIMENT_TAG = "UCL_Test_Bot"`)
 3. Add your Embodiment Tag Mapping (you should use a number `< 31`)
+
 ```python
 class EmbodimentTag(Enum):
     GR1 = "gr1"
@@ -165,7 +199,9 @@ EMBODIMENT_TAG_MAPPING = {
 ```
 
 ### Update Metadata in the Model Checkpoint Folder
+
 For our UCL_Test_Bot, add the following to the metadata.json file. This file can be found in the experiment_cfg folder in your checkpoint directory.
+
 ```json
     "UCL_Test_Bot": {
         "statistics": {
