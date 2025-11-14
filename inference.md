@@ -1,9 +1,44 @@
 # Inference Using Custom Robot and Datasets
 ## Quick Start
-Run inference code with dummy data.
+1. Run inference code with dummy data.
 ```bash
 python inference.py
 ```
+2. You should get terminal outputs:
+```
+ GR00T Input:
+key: video.gripper_view, shape: (1, 256, 256, 3)
+key: state.arm_joint_positions, shape: (1, 7)
+key: state.eef_position, shape: (1, 3)
+key: state.eef_rotation, shape: (1, 3)
+key: action.arm_joint_positions, shape: (16, 7)
+key: action.eef_position, shape: (16, 3)
+key: action.eef_rotation, shape: (16, 3)
+annotation.human.action.task_description ['pick the pear from the counter and place it in the plate']
+
+
+ Getting action from policy...
+action.arm_joint_positions (16, 7)
+action.eef_position (16, 3)
+action.eef_rotation (16, 3)
+```
+## Inputs and Outputs
+### Inputs
+The model takes in the current observation, states, past predicted actions, and task description as inputs.
+* video.gripper_view, shape: (1, 256, 256, 3): (batch_size, height, width, channel)
+* state.arm_joint_positions, shape: (1, 7): (batch_size, num_joints)
+* state.eef_position, shape: (1, 3): (batch_size, cartisian_positions_xyz)
+* state.eef_rotation, shape: (1, 3): (batch_size, cartisian_orientations_rpy)
+* action.arm_joint_positions, shape: (16, 7): (num_time_steps_action_predicted, num_joints)
+* action.eef_position, shape: (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
+* action.eef_rotation, shape: (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
+* annotation.human.action.task_description: A list of length batch_size containing the task description strings.
+
+### Outputs
+The model outputs the predicted actions for the next 16 time steps.
+* action.arm_joint_positions (16, 7): (num_time_steps_action_predicted, num_joints)
+* action.eef_position (16, 3): (num_time_steps_action_predicted, cartisian_positions_xyz)
+* action.eef_rotation (16, 3): (num_time_steps_action_predicted, cartisian_orientations_rpy)
 
 ## How to Add Your Own Robot Configuration?
 ### Add Data Config
