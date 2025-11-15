@@ -68,13 +68,13 @@ for key, value in modality_config.items():
 
 # step_data = dataset[0]
 
-
+batch_size = 1
 
 UCL_Test_Bot_step_data = {
-    "video.gripper_view": np.zeros((1, 256, 256, 3), dtype=np.uint8),
-    "state.arm_joint_positions": np.random.randn(1, 7).astype(np.float32),
-    "state.eef_position": np.random.randn(1, 3).astype(np.float32),
-    "state.eef_rotation": np.random.randn(1, 3).astype(np.float32),
+    "video.gripper_view": np.zeros((batch_size, 256, 256, 3), dtype=np.uint8),
+    "state.arm_joint_positions": np.random.randn(batch_size, 7).astype(np.float32),
+    "state.eef_position": np.random.randn(batch_size, 3).astype(np.float32),
+    "state.eef_rotation": np.random.randn(batch_size, 3).astype(np.float32),
     "action.arm_joint_positions": np.random.randn(16, 7).astype(np.float32),
     "action.eef_position": np.random.randn(16, 3).astype(np.float32),
     "action.eef_rotation": np.random.randn(16, 3).astype(np.float32),
