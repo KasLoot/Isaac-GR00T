@@ -7,6 +7,7 @@ import cv2
 import base64
 from typing import List, Optional
 from inference import run_inference_to_server, get_policy
+import time
 
 # --- Template for VLA Model Integration ---
 # You should import your actual VLA model library here
@@ -54,10 +55,10 @@ class PredictionRequest(BaseModel):
 
 
 class PredictionResponse(BaseModel):
-    action: List[float]
-
+    action: List
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(request: PredictionRequest):
+    time.sleep(2.0)  # Simulate processing delay
     try:
         # Decode image
         img_bytes = base64.b64decode(request.image_base64)
@@ -71,7 +72,7 @@ async def predict(request: PredictionRequest):
         # action = model_wrapper.predict(image, request.instruction, ee_pos=request.ee_pos, ee_quat=request.ee_quat, joint_pos=request.joint_pos)
         vla_action = model_wrapper.predict_2(image, request.instruction, ee_pos=request.ee_pos, ee_quat=request.ee_quat, joint_pos=request.joint_pos)
 
-        vla_action = vla_action.get("action.arm_joint_positions", np.zeros((16, 9), dtype=np.float32))[-1].tolist()
+        vla_action = vla_action.get("action.arm_joint_positions", np.zeros((16, 9), dtype=np.float32)).tolist()
         # print(f"Final action to return: {vla_action}")
         
         return PredictionResponse(action=vla_action)
