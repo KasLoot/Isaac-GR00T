@@ -1,0 +1,34 @@
+push updates to my fork
+    # Push your committed changes to your 'origin' remote (your fork)
+    git push origin <branch-name>
+
+    # For example, to push the 'main' branch:
+    git push origin main
+
+clone to a new machine
+    # Get the URL from the "Code" button on your forked repo's GitHub page
+    git clone <your-fork-url>
+
+
+Pull updates from the original repo and merge
+    # Get the URL from the original repository's GitHub page
+    git remote add upstream <original-repo-url>
+
+    # Verify that it was added
+    git remote -v
+    # You should now see both 'origin' and 'upstream' listed
+
+Fetch the latest updates from the original repo:
+    # This downloads the latest changes from the 'upstream' remote
+    git fetch upstream
+
+Merge the updates into your local branch:
+    make sure you are on the branch you want to update (e.g., main).
+    git checkout main
+
+    merge the changes from the original repo's corresponding branch
+    # This merges the 'main' branch from 'upstream' into your current local 'main' branch
+    git merge upstream/main
+
+Push the merged updates to your fork
+    git push origin main
